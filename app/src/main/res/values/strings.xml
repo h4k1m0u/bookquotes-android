@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Quotes</string>
+    <string name="quote_text_label">Quote text</string>
+    <string name="quote_author_label">Quote author</string>
 </resources>
