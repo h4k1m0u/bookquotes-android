@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import retrofit2.Call;
@@ -20,6 +21,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
+    private LinearLayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,9 +29,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // add actionbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         // recyclerview
         mRecyclerView = (RecyclerView) findViewById(R.id.quotes);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
 
         // initialize the quotes json parser with Retrofit
         Retrofit retrofit = new Retrofit.Builder()
@@ -44,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Feed> call, Response<Feed> feed) {
                 // fill recyclerview from feed
-                QuoteAdapter adapter = new QuoteAdapter(MainActivity.this, feed.body().getResults());
+                QuoteAdapter adapter = new QuoteAdapter(feed.body().getResults());
                 mRecyclerView.setAdapter(adapter);
             }
 

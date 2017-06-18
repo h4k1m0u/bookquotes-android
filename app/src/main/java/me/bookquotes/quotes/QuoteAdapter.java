@@ -1,7 +1,8 @@
 package me.bookquotes.quotes;
 
-import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import java.util.List;
 
 public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.QuoteViewHolder> {
     private List<Quote> mQuotes;
+    private RecyclerView mRecyclerView;
 
     class QuoteViewHolder extends RecyclerView.ViewHolder {
         TextView mQuoteTextView;
@@ -28,8 +30,17 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.QuoteViewHol
         }
     }
 
-    public QuoteAdapter(Context context, List<Quote> quotes) {
+    public QuoteAdapter(List<Quote> quotes) {
+        // custom constructor
         mQuotes = quotes;
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+
+        // save reference to recyclerview in adapter: https://stackoverflow.com/a/31250210/2228912
+        mRecyclerView = recyclerView;
     }
 
     @Override
@@ -37,6 +48,24 @@ public class QuoteAdapter extends RecyclerView.Adapter<QuoteAdapter.QuoteViewHol
         // inflate a viewholder
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.quote_row, null);
         QuoteViewHolder viewHolder = new QuoteViewHolder(view);
+
+        // attach listener on recyclerview scroll
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                // test if bottom position is reached
+                LinearLayoutManager layoutManager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
+                int visibleItemCount = layoutManager.getChildCount();
+                int pastVisibleItems = layoutManager.findFirstVisibleItemPosition();
+                int totalItemCount = layoutManager.getItemCount();
+
+                if (pastVisibleItems + visibleItemCount >= totalItemCount) {
+                    Log.d("Bottom reached", "bottom");
+                }
+            }
+        });
 
         return viewHolder;
     }
