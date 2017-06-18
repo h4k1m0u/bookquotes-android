@@ -21,7 +21,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
-    private LinearLayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,23 +34,23 @@ public class MainActivity extends AppCompatActivity {
 
         // recyclerview
         mRecyclerView = (RecyclerView) findViewById(R.id.quotes);
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // initialize the quotes json parser with Retrofit
         Retrofit retrofit = new Retrofit.Builder()
             .baseUrl("http://bookquotes.me/")
             .addConverterFactory(GsonConverterFactory.create())
             .build();
-        FeedAPI api = retrofit.create(FeedAPI.class);
-        Call<Feed> call = api.getFeed();
+        final FeedAPI api = retrofit.create(FeedAPI.class);
 
-        // asynchronously download the remote json feed
+        // asynchronously download the first remote json feed
+        Call<Feed> call = api.getFeed(1);
         call.enqueue(new Callback<Feed>() {
             @Override
-            public void onResponse(Call<Feed> call, Response<Feed> feed) {
+            public void onResponse(Call<Feed> call, Response<Feed> response) {
                 // fill recyclerview from feed
-                QuoteAdapter adapter = new QuoteAdapter(feed.body().getResults());
+                Feed feed = response.body();
+                QuoteAdapter adapter = new QuoteAdapter(feed, api);
                 mRecyclerView.setAdapter(adapter);
             }
 
