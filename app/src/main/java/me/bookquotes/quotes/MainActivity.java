@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<Feed> call, Response<Feed> response) {
                 // fill recyclerview from feed
                 Feed feed = response.body();
-                QuoteAdapter adapter = new QuoteAdapter(feed, api);
+                QuoteAdapter adapter = new QuoteAdapter(feed, api, mRecyclerView);
                 mRecyclerView.setAdapter(adapter);
             }
 
