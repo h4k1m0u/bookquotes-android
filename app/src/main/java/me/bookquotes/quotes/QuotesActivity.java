@@ -18,7 +18,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Parsing remote json:
@@ -26,7 +25,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * http://square.github.io/retrofit/
  */
 
-public class MainActivity extends AppCompatActivity {
+public class QuotesActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private BroadcastReceiver mReceiver;
 
@@ -63,21 +62,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getInitialData() {
-        // initialize the quotes json parser with Retrofit
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://bookquotes.me/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        final FeedAPI api = retrofit.create(FeedAPI.class);
+
+        // get token from extras
+        Intent intent = getIntent();
+        String t = intent.getExtras().getString("token");
+        final String header = "Token " + t;
 
         // asynchronously download the first remote json feed
-        Call<Feed> call = api.getFeed(1);
+        Retrofit retrofit = Util.getBuilder();
+        final FeedAPI api = retrofit.create(FeedAPI.class);
+        Call<Feed> call = api.getFeed(header, 1);
         call.enqueue(new Callback<Feed>() {
             @Override
             public void onResponse(Call<Feed> call, Response<Feed> response) {
                 // fill recyclerview from feed
                 Feed feed = response.body();
-                QuoteAdapter mQuoteAdapter = new QuoteAdapter(feed, api, mRecyclerView);
+                QuoteAdapter mQuoteAdapter = new QuoteAdapter(header, feed, api, mRecyclerView);
                 mRecyclerView.setAdapter(mQuoteAdapter);
             }
 
