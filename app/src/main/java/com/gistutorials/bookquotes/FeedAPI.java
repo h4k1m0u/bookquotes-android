@@ -1,8 +1,7 @@
-package me.bookquotes.quotes;
+package com.gistutorials.bookquotes;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
 import retrofit2.http.Query;
 
 /**
@@ -11,5 +10,5 @@ import retrofit2.http.Query;
 
 public interface FeedAPI {
     @GET("quotes/?format=json")
-    Call<Feed> getFeed(@Header("Authorization") String token, @Query("page") int page);
+    Call<Feed> getFeed(@Query("page") int page);
 }

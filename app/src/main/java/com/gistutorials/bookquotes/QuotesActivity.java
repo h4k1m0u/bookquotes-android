@@ -1,4 +1,4 @@
-package me.bookquotes.quotes;
+package com.gistutorials.bookquotes;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -62,22 +62,16 @@ public class QuotesActivity extends AppCompatActivity {
     }
 
     public void getInitialData() {
-
-        // get token from extras
-        Intent intent = getIntent();
-        String t = intent.getExtras().getString("token");
-        final String header = "Token " + t;
-
         // asynchronously download the first remote json feed
         Retrofit retrofit = Util.getBuilder();
         final FeedAPI api = retrofit.create(FeedAPI.class);
-        Call<Feed> call = api.getFeed(header, 1);
+        Call<Feed> call = api.getFeed(1);
         call.enqueue(new Callback<Feed>() {
             @Override
             public void onResponse(Call<Feed> call, Response<Feed> response) {
                 // fill recyclerview from feed
                 Feed feed = response.body();
-                QuoteAdapter mQuoteAdapter = new QuoteAdapter(header, feed, api, mRecyclerView);
+                QuoteAdapter mQuoteAdapter = new QuoteAdapter(feed, api, mRecyclerView);
                 mRecyclerView.setAdapter(mQuoteAdapter);
             }
 

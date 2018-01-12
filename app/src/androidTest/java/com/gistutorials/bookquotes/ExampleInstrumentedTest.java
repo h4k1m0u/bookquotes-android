@@ -1,4 +1,4 @@
-package me.bookquotes.quotes;
+package com.gistutorials.bookquotes;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

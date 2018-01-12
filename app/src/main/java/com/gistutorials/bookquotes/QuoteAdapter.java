@@ -1,4 +1,4 @@
-package me.bookquotes.quotes;
+package com.gistutorials.bookquotes;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,7 +22,6 @@ import retrofit2.Response;
  */
 
 public class QuoteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private String mHeader;
     private List<Quote> mQuotes;
     private RecyclerView mRecyclerView;
     private int mNextPage;
@@ -52,9 +51,8 @@ public class QuoteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
-    public QuoteAdapter(String header, Feed feed, FeedAPI api, RecyclerView recyclerView) {
+    public QuoteAdapter(Feed feed, FeedAPI api, RecyclerView recyclerView) {
         // custom constructor
-        mHeader = header;
         mQuotes = feed.getResults();
         mNextPage = 2;
         mAPI = api;
@@ -83,7 +81,7 @@ public class QuoteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     QuoteAdapter.this.notifyItemInserted(mQuotes.size() - 1);
 
                     // asynchronously download the next remote json feed
-                    Call<Feed> call = mAPI.getFeed(mHeader, mNextPage);
+                    Call<Feed> call = mAPI.getFeed(mNextPage);
                     call.enqueue(new Callback<Feed>() {
                         @Override
                         public void onResponse(Call<Feed> call, Response<Feed> response) {

@@ -1,4 +1,4 @@
-package me.bookquotes.quotes;
+package com.gistutorials.bookquotes;
 
 import com.google.gson.annotations.SerializedName;
 

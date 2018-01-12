@@ -1,4 +1,4 @@
-package me.bookquotes.quotes;
+package com.gistutorials.bookquotes;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -16,7 +16,7 @@ public class Util {
 
         // initialize the json parser with retrofit
         Retrofit builder = new Retrofit.Builder()
-                .baseUrl("http://bookquotes.me/api/")
+                .baseUrl("http://gistutorials.com/api/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient.build())
                 .build();
